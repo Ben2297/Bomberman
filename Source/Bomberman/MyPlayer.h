@@ -2,7 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "MyPawnMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include "MyPlayer.generated.h"
 
 UCLASS()
@@ -14,6 +16,11 @@ public:
 	// Sets default values for this pawn's properties
 	AMyPlayer();
 
+	// Collision sphere
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		USphereComponent* SphereComponent;
+
+	// Static mesh
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* MeshComponent;
 
@@ -29,13 +36,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	FVector MovementDirection;
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float MovementSpeed = 500.0f;
-
 	UFUNCTION()
 		void MoveForward(float Value);
 
 	UFUNCTION()
 		void MoveRight(float Value);
+
+	class UMyPawnMovementComponent* MovementComponent;
+
+	virtual UMyPawnMovementComponent* GetMovementComponent() const override;
 };
