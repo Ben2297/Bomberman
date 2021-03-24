@@ -39,6 +39,9 @@ private:
 	int maxBombs;
 	int currentBombs;
 
+	bool movingForward;
+	bool movingRight;
+
 	UFUNCTION()
 		void MoveForward(float Value);
 

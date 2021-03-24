@@ -23,6 +23,7 @@ AMyPlayer::AMyPlayer()
 
 	maxBombs = 1;
 	currentBombs = 0;
+	movingForward = movingRight = false;
 }
 
 // Called when the game starts or when spawned
@@ -51,6 +52,16 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AMyPlayer::MoveForward(float Value)
 {
+	if (Value == 0 || movingRight)
+	{
+		movingForward = false;
+		return;
+	}
+	else
+	{
+		movingForward = true;
+	}
+
 	if (MovementComponent && (MovementComponent->UpdatedComponent == RootComponent))
 	{
 		MovementComponent->AddInputVector(FVector(1.f, 0.f, 0.f) * Value);
@@ -74,6 +85,16 @@ void AMyPlayer::MoveForward(float Value)
 
 void AMyPlayer::MoveRight(float Value)
 {
+	if (Value == 0 || movingForward)
+	{
+		movingRight = false;
+		return;
+	}
+	else
+	{
+		movingRight = true;
+	}
+
 	if (MovementComponent && (MovementComponent->UpdatedComponent == RootComponent))
 	{
 		MovementComponent->AddInputVector(FVector(0.f, 1.f, 0.f) * Value);
