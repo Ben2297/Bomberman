@@ -36,11 +36,17 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	int maxBombs;
+	int currentBombs;
+
 	UFUNCTION()
 		void MoveForward(float Value);
 
 	UFUNCTION()
 		void MoveRight(float Value);
+
+	UFUNCTION()
+		void PlaceBomb();
 
 	class UMyPawnMovementComponent* MovementComponent;
 

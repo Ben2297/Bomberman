@@ -1,4 +1,5 @@
 #include "MyPlayer.h"
+#include "MyBomb.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -19,6 +20,9 @@ AMyPlayer::AMyPlayer()
 	// Creates a pawn movement component and sets the root as the component to update
 	MovementComponent = CreateDefaultSubobject<UMyPawnMovementComponent>(TEXT("MovementComponent"));
 	MovementComponent->UpdatedComponent = RootComponent;
+
+	maxBombs = 1;
+	currentBombs = 0;
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +46,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
+	PlayerInputComponent->BindAction("PlaceBomb", IE_Pressed, this, &AMyPlayer::PlaceBomb);
 }
 
 void AMyPlayer::MoveForward(float Value)
@@ -56,12 +61,12 @@ void AMyPlayer::MoveForward(float Value)
 			if (Value > 0.f)
 			{
 				// Moving forwards
-				RootComponent->SetRelativeRotation(FRotator(0.f, 0.f, 0.f) * Value);
+				RootComponent->SetWorldRotation(FRotator(0.f, 0.f, 0.f) * Value);
 			}
 			else
 			{
 				// Moving backwards
-				RootComponent->SetRelativeRotation(FRotator(0.f, 180.f, 0.f) * Value);
+				RootComponent->SetWorldRotation(FRotator(0.f, 180.f, 0.f) * Value);
 			}
 		}
 	}
@@ -77,9 +82,22 @@ void AMyPlayer::MoveRight(float Value)
 		if (Value != 0.f)
 		{
 			// Moving right/left
-			RootComponent->SetRelativeRotation(FRotator(0.f, 90.f, 0.f) * Value);
+			RootComponent->SetWorldRotation(FRotator(0.f, 90.f, 0.f) * Value);
 		}
 	}
+}
+
+void AMyPlayer::PlaceBomb()
+{
+	if (currentBombs < maxBombs)
+	{
+		++currentBombs;
+		FVector Location(280.0f, 110.0f, 45.0f);
+		FRotator Rotation(0.0f, 0.0f, 0.0f);
+		FActorSpawnParameters SpawnInfo;
+		GetWorld()->SpawnActor<AMyBomb>(Location, Rotation, SpawnInfo);
+	}
+	
 }
 
 UMyPawnMovementComponent* AMyPlayer::GetMovementComponent() const
