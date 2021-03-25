@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "MyBomb.h"
+#include <vector>
 #include "MyPlayer.generated.h"
 
 UCLASS()
@@ -45,7 +46,7 @@ private:
 
 	int maxBombs;
 	int currentBombs;
-	AMyBomb* MyBomb;
+	std::vector<AMyBomb*> MyBombs;
 
 	bool movingForward;
 	bool movingRight;

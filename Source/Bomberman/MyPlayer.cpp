@@ -43,7 +43,6 @@ void AMyPlayer::BeginPlay()
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -116,14 +115,28 @@ void AMyPlayer::MoveRight(float Value)
 
 void AMyPlayer::PlaceBomb()
 {
-	if (!IsValid(MyBomb))
+	std::vector<AMyBomb*>::iterator it = MyBombs.begin();
+	while (it != MyBombs.end())
+	{
+		if (!IsValid(*it))
+		{
+			--currentBombs;
+			it = MyBombs.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+
+	if (currentBombs < maxBombs)
 	{
 		++currentBombs;
 		FVector Location = GetActorLocation() + GetActorForwardVector() * BOMB_INIT_DIST;
 		Location.Z -= 13.0f;
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
-		MyBomb = GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo);
+		MyBombs.push_back(GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo));
 	}
 }
 
