@@ -1,5 +1,4 @@
 #include "MyPlayer.h"
-#include "MyBomb.h"
 #include "UObject/ConstructorHelpers.h"
 
 // Sets default values
@@ -117,16 +116,15 @@ void AMyPlayer::MoveRight(float Value)
 
 void AMyPlayer::PlaceBomb()
 {
-	if (currentBombs < maxBombs)
+	if (!IsValid(MyBomb))
 	{
 		++currentBombs;
 		FVector Location = GetActorLocation() + GetActorForwardVector() * BOMB_INIT_DIST;
 		Location.Z -= 13.0f;
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
-		GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo);
+		MyBomb = GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo);
 	}
-	
 }
 
 UMyPawnMovementComponent* AMyPlayer::GetMovementComponent() const

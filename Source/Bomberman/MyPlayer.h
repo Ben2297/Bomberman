@@ -5,6 +5,7 @@
 #include "MyPawnMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
+#include "MyBomb.h"
 #include "MyPlayer.generated.h"
 
 UCLASS()
@@ -44,6 +45,7 @@ private:
 
 	int maxBombs;
 	int currentBombs;
+	AMyBomb* MyBomb;
 
 	bool movingForward;
 	bool movingRight;
