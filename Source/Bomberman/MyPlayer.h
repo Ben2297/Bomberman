@@ -24,6 +24,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* MeshComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TSubclassOf<class AActor> Bomb;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,7 +39,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	static const int BOMB_INIT_DIST = 30; // Bomb's initial distance from player
+	// Bomb's initial distance from player
+	static const int BOMB_INIT_DIST = 30;
 
 	int maxBombs;
 	int currentBombs;

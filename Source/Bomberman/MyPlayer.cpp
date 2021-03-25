@@ -1,5 +1,6 @@
 #include "MyPlayer.h"
 #include "MyBomb.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
@@ -20,6 +21,12 @@ AMyPlayer::AMyPlayer()
 	// Creates a pawn movement component and sets the root as the component to update
 	MovementComponent = CreateDefaultSubobject<UMyPawnMovementComponent>(TEXT("MovementComponent"));
 	MovementComponent->UpdatedComponent = RootComponent;
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> BombBP(TEXT("Blueprint'/Game/Blueprints/BombBP.BombBP'"));
+	if (BombBP.Succeeded())
+	{
+		Bomb = (UClass*)BombBP.Object->GeneratedClass;
+	}
 
 	maxBombs = 1;
 	currentBombs = 0;
@@ -117,7 +124,7 @@ void AMyPlayer::PlaceBomb()
 		Location.Z -= 13.0f;
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
-		GetWorld()->SpawnActor<AMyBomb>(Location, Rotation, SpawnInfo);
+		GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo);
 	}
 	
 }

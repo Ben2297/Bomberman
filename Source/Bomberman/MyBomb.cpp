@@ -1,5 +1,6 @@
 #include "MyBomb.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 // Sets default values
@@ -16,7 +17,7 @@ AMyBomb::AMyBomb()
 	// Adds a static mesh
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	MeshComponent->SetupAttachment(GetRootComponent());
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
 	if (MeshAsset.Succeeded())
 	{
 		MeshComponent->SetStaticMesh(MeshAsset.Object);
@@ -54,6 +55,12 @@ void AMyBomb::OnExplode()
 	// Clears the timer
 	GetWorldTimerManager().ClearTimer(FuseTimerHandle);
 
+	if (ParticleComponent)
+	{
+		// Triggers the explosion effect
+		UGameplayStatics::SpawnEmitterAtLocation(this, ParticleComponent, GetActorLocation(), GetActorRotation());
+	}
+	
 	// Destroys the bomb
 	Destroy();
 }

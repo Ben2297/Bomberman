@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInterface.h"
+#include "ParticleDefinitions.h"
 #include "Engine/EngineTypes.h"
 #include "MyBomb.generated.h"
 
@@ -25,8 +26,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* MeshComponent;
 
+	// Mesh material
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UMaterialInterface* MaterialReference;
+
+	// Particle system
+	UPROPERTY(EditDefaultsOnly)
+		UParticleSystem* ParticleComponent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,8 +43,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Timer handle
 	FTimerHandle FuseTimerHandle;
 
+	// Function to call upon explosion
 	UFUNCTION()
 		void OnExplode();
 };
