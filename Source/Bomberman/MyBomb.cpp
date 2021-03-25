@@ -9,14 +9,11 @@ AMyBomb::AMyBomb()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
-	BoxComponent->SetBoxExtent(FVector(10.f, 10.f, 30.f));
-	BoxComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	SetRootComponent(BoxComponent);
+	
 
 	// Adds a static mesh
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
-	MeshComponent->SetupAttachment(GetRootComponent());
+	SetRootComponent(MeshComponent);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
 	if (MeshAsset.Succeeded())
 	{
@@ -31,6 +28,17 @@ AMyBomb::AMyBomb()
 	{
 		MeshComponent->SetMaterial(0, MaterialReference);
 	}
+
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
+	BoxComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	BoxComponent->SetupAttachment(GetRootComponent());
+
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
+	SphereComponent->SetupAttachment(GetRootComponent());
+	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AMyBomb::OnActorEnter);
+	SphereComponent->SetGenerateOverlapEvents(true);
 }
 
 // Called when the game starts or when spawned
@@ -60,7 +68,29 @@ void AMyBomb::OnExplode()
 		// Triggers the explosion effect
 		UGameplayStatics::SpawnEmitterAtLocation(this, ParticleComponent, GetActorLocation(), GetActorRotation());
 	}
+
+	TArray<AActor*> Result;
+	SphereComponent->GetOverlappingActors(Result, AMyDestructibleWall::StaticClass());
+
+	for (auto& wall : Result)
+	{
+		wall->Destroy();
+	}
 	
 	// Destroys the bomb
 	Destroy();
+}
+
+void AMyBomb::OnActorEnter(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AMyDestructibleWall* Wall = nullptr;
+
+	if (OtherActor != nullptr)
+	{
+		Wall = Cast<AMyDestructibleWall>(OtherActor);
+		if (Wall != nullptr)
+		{
+			WallsToDestroy.push_back(Wall);
+		}
+	}
 }

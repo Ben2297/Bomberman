@@ -3,10 +3,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "ParticleDefinitions.h"
 #include "Engine/EngineTypes.h"
+#include "MyDestructibleWall.h"
+#include <vector>
 #include "MyBomb.generated.h"
 
 UCLASS()
@@ -21,6 +24,9 @@ public:
 	// Collision box
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UBoxComponent* BoxComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		USphereComponent* SphereComponent;
 
 	// Static mesh
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -46,7 +52,17 @@ private:
 	// Timer handle
 	FTimerHandle FuseTimerHandle;
 
+	std::vector<AMyDestructibleWall*> WallsToDestroy;
+
 	// Function to call upon explosion
 	UFUNCTION()
 		void OnExplode();
+
+	UFUNCTION()
+		void OnActorEnter(UPrimitiveComponent* OverlapComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent,
+			int32 OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult &SweepResult);
 };
