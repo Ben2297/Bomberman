@@ -1,4 +1,5 @@
 #include "MyBomb.h"
+#include "TimerManager.h"
 #include "UObject/ConstructorHelpers.h"
 
 // Sets default values
@@ -29,8 +30,6 @@ AMyBomb::AMyBomb()
 	{
 		MeshComponent->SetMaterial(0, MaterialReference);
 	}
-
-	
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +37,8 @@ void AMyBomb::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Sets bomb timer
+	GetWorldTimerManager().SetTimer(FuseTimerHandle, this, &AMyBomb::OnExplode, 3.0f, false);
 }
 
 // Called every frame
@@ -45,4 +46,14 @@ void AMyBomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+// Called when fuse time is elapsed
+void AMyBomb::OnExplode()
+{
+	// Clears the timer
+	GetWorldTimerManager().ClearTimer(FuseTimerHandle);
+
+	// Destroys the bomb
+	Destroy();
 }

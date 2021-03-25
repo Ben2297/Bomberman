@@ -38,4 +38,7 @@ public:
 
 private:
 	FTimerHandle FuseTimerHandle;
+
+	UFUNCTION()
+		void OnExplode();
 };
