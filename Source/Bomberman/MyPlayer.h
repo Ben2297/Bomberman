@@ -36,6 +36,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	static const int BOMB_INIT_DIST = 30; // Bomb's initial distance from player
+
 	int maxBombs;
 	int currentBombs;
 

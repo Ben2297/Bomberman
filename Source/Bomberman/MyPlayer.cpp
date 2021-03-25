@@ -113,7 +113,8 @@ void AMyPlayer::PlaceBomb()
 	if (currentBombs < maxBombs)
 	{
 		++currentBombs;
-		FVector Location = GetActorLocation() + GetActorForwardVector() * 30;
+		FVector Location = GetActorLocation() + GetActorForwardVector() * BOMB_INIT_DIST;
+		Location.Z -= 13.0f;
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
 		GetWorld()->SpawnActor<AMyBomb>(Location, Rotation, SpawnInfo);
