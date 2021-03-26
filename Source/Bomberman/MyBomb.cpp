@@ -37,7 +37,6 @@ AMyBomb::AMyBomb()
 	SphereComponent->SetupAttachment(GetRootComponent());
 	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AMyBomb::OnActorEnter);
 	SphereComponent->SetGenerateOverlapEvents(true);
 }
 
@@ -79,18 +78,4 @@ void AMyBomb::OnExplode()
 	
 	// Destroys the bomb
 	Destroy();
-}
-
-void AMyBomb::OnActorEnter(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	AMyDestructibleWall* Wall = nullptr;
-
-	if (OtherActor != nullptr)
-	{
-		Wall = Cast<AMyDestructibleWall>(OtherActor);
-		if (Wall != nullptr)
-		{
-			WallsToDestroy.push_back(Wall);
-		}
-	}
 }

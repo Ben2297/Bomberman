@@ -57,12 +57,4 @@ private:
 	// Function to call upon explosion
 	UFUNCTION()
 		void OnExplode();
-
-	UFUNCTION()
-		void OnActorEnter(UPrimitiveComponent* OverlapComponent,
-			AActor* OtherActor,
-			UPrimitiveComponent* OtherComponent,
-			int32 OtherBodyIndex,
-			bool bFromSweep,
-			const FHitResult &SweepResult);
 };
