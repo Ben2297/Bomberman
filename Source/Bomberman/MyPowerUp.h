@@ -2,17 +2,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/StaticMeshComponent.h"
-#include "MyDestructibleWall.generated.h"
+#include "MyPowerUp.generated.h"
 
 UCLASS()
-class BOMBERMAN_API AMyDestructibleWall : public AActor
+class BOMBERMAN_API AMyPowerUp : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyDestructibleWall();
+	AMyPowerUp();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -24,4 +23,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void ActivatePowerUp() PURE_VIRTUAL(AMyPowerUp::ActivatePowerUp);
 };

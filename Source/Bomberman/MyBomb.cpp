@@ -2,6 +2,10 @@
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "MyDestructibleWall.h"
+#include "MyPlayer.h"
+
+const float AMyBomb::DEFAULT_SPHERE_RADIUS = 200.0f;
 
 // Sets default values
 AMyBomb::AMyBomb()
@@ -38,6 +42,7 @@ AMyBomb::AMyBomb()
 	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComponent->SetGenerateOverlapEvents(true);
+	SphereComponent->SetSphereRadius(DEFAULT_SPHERE_RADIUS);
 }
 
 // Called when the game starts or when spawned
@@ -74,6 +79,14 @@ void AMyBomb::OnExplode()
 	for (auto& wall : Result)
 	{
 		wall->Destroy();
+	}
+
+	Result.Empty();
+	SphereComponent->GetOverlappingActors(Result, AMyPlayer::StaticClass());
+
+	for (auto& player : Result)
+	{
+		player->Destroy();
 	}
 	
 	// Destroys the bomb

@@ -29,6 +29,7 @@ AMyPlayer::AMyPlayer()
 
 	maxBombs = 1;
 	currentBombs = 0;
+	bigBlast = false;
 	movingForward = movingRight = false;
 }
 
@@ -53,6 +54,23 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
 	PlayerInputComponent->BindAction("PlaceBomb", IE_Pressed, this, &AMyPlayer::PlaceBomb);
+}
+
+void AMyPlayer::IncreaseBombBlast()
+{
+	bigBlast = true;
+}
+
+void AMyPlayer::MoreBombs()
+{
+}
+
+void AMyPlayer::BoostSpeed()
+{
+}
+
+void AMyPlayer::RemoteBombs()
+{
 }
 
 void AMyPlayer::MoveForward(float Value)
@@ -136,6 +154,8 @@ void AMyPlayer::PlaceBomb()
 		Location.Z -= 13.0f;
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		
 		MyBombs.push_back(GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo));
 	}
 }

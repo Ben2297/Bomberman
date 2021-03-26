@@ -29,20 +29,27 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		TSubclassOf<class AActor> Bomb;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void IncreaseBombBlast();
+
+	void MoreBombs();
+
+	void BoostSpeed();
+
+	void RemoteBombs();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	// Bomb's initial distance from player
-	static const int BOMB_INIT_DIST = 30;
+	static const int BOMB_INIT_DIST = 20;
 
 	int maxBombs;
 	int currentBombs;
@@ -50,6 +57,8 @@ private:
 
 	bool movingForward;
 	bool movingRight;
+
+	bool bigBlast;
 
 	UFUNCTION()
 		void MoveForward(float Value);

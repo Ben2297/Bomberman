@@ -8,7 +8,6 @@
 #include "Materials/MaterialInterface.h"
 #include "ParticleDefinitions.h"
 #include "Engine/EngineTypes.h"
-#include "MyDestructibleWall.h"
 #include <vector>
 #include "MyBomb.generated.h"
 
@@ -20,6 +19,9 @@ class BOMBERMAN_API AMyBomb : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AMyBomb();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	// Collision box
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -44,15 +46,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 private:
 	// Timer handle
 	FTimerHandle FuseTimerHandle;
 
-	std::vector<AMyDestructibleWall*> WallsToDestroy;
+	static const float DEFAULT_SPHERE_RADIUS;
 
 	// Function to call upon explosion
 	UFUNCTION()
