@@ -49,16 +49,6 @@ void AMyPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-// Called to bind functionality to input
-void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
-	PlayerInputComponent->BindAction("PlaceBomb", IE_Pressed, this, &AMyPlayer::PlaceBomb);
-}
-
 void AMyPlayer::IncreaseBombBlast()
 {
 	bigBlast = true;

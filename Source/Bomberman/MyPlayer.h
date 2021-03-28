@@ -32,9 +32,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	void IncreaseBombBlast();
 
 	void MoreBombs();
@@ -42,6 +39,15 @@ public:
 	void BoostSpeed();
 
 	void RemoteBombs();
+
+	UFUNCTION()
+		void MoveForward(float Value);
+
+	UFUNCTION()
+		void MoveRight(float Value);
+
+	UFUNCTION()
+		void PlaceBomb();
 
 protected:
 	// Called when the game starts or when spawned
@@ -62,14 +68,6 @@ private:
 
 	float speedMultiplier;
 
-	UFUNCTION()
-		void MoveForward(float Value);
-
-	UFUNCTION()
-		void MoveRight(float Value);
-
-	UFUNCTION()
-		void PlaceBomb();
 
 	class UMyPawnMovementComponent* MovementComponent;
 

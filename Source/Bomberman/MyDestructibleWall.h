@@ -39,7 +39,8 @@ protected:
 
 private:
 	bool dropPowerUp;
+	int selectedPowerUp;
 
 	UFUNCTION()
-		void WhenDestroyed(AActor* Act);
+		void WhenDestroyed(AActor* actor);
 };

@@ -34,6 +34,7 @@ AMyDestructibleWall::AMyDestructibleWall()
 	OnDestroyed.AddDynamic(this, &AMyDestructibleWall::WhenDestroyed);
 
 	dropPowerUp = false;
+	selectedPowerUp = 1;
 }
 
 // Called when the game starts or when spawned
@@ -42,7 +43,7 @@ void AMyDestructibleWall::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AMyDestructibleWall::WhenDestroyed(AActor* Act)
+void AMyDestructibleWall::WhenDestroyed(AActor* actor)
 {
 	dropPowerUp = (FMath::RandRange(1, 100 / 30) == 1 ? true : false);
 	if (dropPowerUp)
@@ -50,7 +51,7 @@ void AMyDestructibleWall::WhenDestroyed(AActor* Act)
 		FVector Location = GetActorLocation();
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
-		int selectedPowerUp = FMath::RandRange(1, 3);
+		selectedPowerUp = FMath::RandRange(1, 3);
 		switch (selectedPowerUp)
 		{
 		case 1:
