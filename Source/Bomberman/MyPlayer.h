@@ -18,7 +18,7 @@ public:
 	// Sets default values for this pawn's properties
 	AMyPlayer();
 
-	// Collision sphere
+	// Sphere collision volume
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		USphereComponent* SphereComponent;
 
@@ -27,7 +27,7 @@ public:
 		UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TSubclassOf<class AActor> Bomb;
+		TSubclassOf<class AMyBomb> Bomb;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -59,6 +59,8 @@ private:
 	bool movingRight;
 
 	bool bigBlast;
+
+	float speedMultiplier;
 
 	UFUNCTION()
 		void MoveForward(float Value);

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "MyPowerUp.h"
+#include "MyPlayer.h"
 #include "Components/StaticMeshComponent.h"
 #include "MyIncreaseBombBlast.generated.h"
 
@@ -14,5 +15,5 @@ public:
 	AMyIncreaseBombBlast();
 
 protected:
-	void ActivatePowerUp();
+	void ActivatePowerUp(AMyPlayer* Player);
 };

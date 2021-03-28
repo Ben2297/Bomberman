@@ -5,7 +5,7 @@ AMyIncreaseBombBlast::AMyIncreaseBombBlast()
 
 }
 
-void AMyIncreaseBombBlast::ActivatePowerUp()
+void AMyIncreaseBombBlast::ActivatePowerUp(AMyPlayer* Player)
 {
-
+	Player->IncreaseBombBlast();
 }

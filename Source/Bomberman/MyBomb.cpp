@@ -13,8 +13,6 @@ AMyBomb::AMyBomb()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
-
 	// Adds a static mesh
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	SetRootComponent(MeshComponent);
@@ -33,10 +31,12 @@ AMyBomb::AMyBomb()
 		MeshComponent->SetMaterial(0, MaterialReference);
 	}
 
+	// Adds collision box
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
 	BoxComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 	BoxComponent->SetupAttachment(GetRootComponent());
 
+	// Adds collision sphere
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
 	SphereComponent->SetupAttachment(GetRootComponent());
 	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
@@ -73,22 +73,30 @@ void AMyBomb::OnExplode()
 		UGameplayStatics::SpawnEmitterAtLocation(this, ParticleComponent, GetActorLocation(), GetActorRotation());
 	}
 
+	// Gets list of destructible walls within the explosion radius
 	TArray<AActor*> Result;
 	SphereComponent->GetOverlappingActors(Result, AMyDestructibleWall::StaticClass());
 
+	// Destroys destructible walls in range of bomb
 	for (auto& wall : Result)
 	{
 		wall->Destroy();
 	}
 
+	// Gets list of players with the explosion radius
 	Result.Empty();
 	SphereComponent->GetOverlappingActors(Result, AMyPlayer::StaticClass());
 
 	for (auto& player : Result)
 	{
-		player->Destroy();
+		//player->Destroy();
 	}
 	
 	// Destroys the bomb
 	Destroy();
+}
+
+void AMyBomb::SetBlastRadius(float radius)
+{
+	SphereComponent->SetSphereRadius(radius);
 }

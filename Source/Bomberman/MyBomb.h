@@ -23,10 +23,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Collision box
+	void SetBlastRadius(float radius);
+
+	// Box collision volume
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UBoxComponent* BoxComponent;
 
+	// Sphere collision volume
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		USphereComponent* SphereComponent;
 

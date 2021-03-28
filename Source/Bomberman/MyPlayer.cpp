@@ -21,15 +21,18 @@ AMyPlayer::AMyPlayer()
 	MovementComponent = CreateDefaultSubobject<UMyPawnMovementComponent>(TEXT("MovementComponent"));
 	MovementComponent->UpdatedComponent = RootComponent;
 
+	// Finds the bomb blueprint
 	static ConstructorHelpers::FObjectFinder<UBlueprint> BombBP(TEXT("Blueprint'/Game/Blueprints/BombBP.BombBP'"));
 	if (BombBP.Succeeded())
 	{
 		Bomb = (UClass*)BombBP.Object->GeneratedClass;
 	}
 
+	// Initialises data members
 	maxBombs = 1;
 	currentBombs = 0;
 	bigBlast = false;
+	speedMultiplier = 1.0f;
 	movingForward = movingRight = false;
 }
 
@@ -63,14 +66,17 @@ void AMyPlayer::IncreaseBombBlast()
 
 void AMyPlayer::MoreBombs()
 {
+	++maxBombs;
 }
 
 void AMyPlayer::BoostSpeed()
 {
+	speedMultiplier = 2.0f;
 }
 
 void AMyPlayer::RemoteBombs()
 {
+
 }
 
 void AMyPlayer::MoveForward(float Value)
@@ -87,7 +93,7 @@ void AMyPlayer::MoveForward(float Value)
 
 	if (MovementComponent && (MovementComponent->UpdatedComponent == RootComponent))
 	{
-		MovementComponent->AddInputVector(FVector(1.f, 0.f, 0.f) * Value);
+		MovementComponent->AddInputVector(FVector(1.f, 0.f, 0.f) * Value * speedMultiplier);
 
 		// If key is being held
 		if (Value != 0.f)
@@ -120,7 +126,7 @@ void AMyPlayer::MoveRight(float Value)
 
 	if (MovementComponent && (MovementComponent->UpdatedComponent == RootComponent))
 	{
-		MovementComponent->AddInputVector(FVector(0.f, 1.f, 0.f) * Value);
+		MovementComponent->AddInputVector(FVector(0.f, 1.f, 0.f) * Value * speedMultiplier);
 
 		// If key is being held
 		if (Value != 0.f)
@@ -155,8 +161,12 @@ void AMyPlayer::PlaceBomb()
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-		MyBombs.push_back(GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo));
+		AMyBomb* tempBomb = (GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo));
+		if (bigBlast)
+		{
+			tempBomb->SetBlastRadius(200.0f);
+		}
+		MyBombs.push_back(tempBomb);
 	}
 }
 
