@@ -14,5 +14,5 @@ public:
 	AMyMoreBombs();
 
 protected:
-	void ActivatePowerUp(AMyPlayer* Player);
+	void ActivatePowerUp(AMyPlayer* Player) override;
 };

@@ -14,5 +14,5 @@ public:
 	AMySpeedBoost();
 
 protected:
-	void ActivatePowerUp(AMyPlayer* Player);
+	void ActivatePowerUp(AMyPlayer* Player) override;
 };
