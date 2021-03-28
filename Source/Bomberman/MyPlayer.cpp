@@ -164,7 +164,7 @@ void AMyPlayer::PlaceBomb()
 		AMyBomb* tempBomb = (GetWorld()->SpawnActor<AMyBomb>(Bomb, Location, Rotation, SpawnInfo));
 		if (bigBlast)
 		{
-			tempBomb->SetBlastRadius(200.0f);
+			tempBomb->SetBlastRadius(400.0f);
 		}
 		MyBombs.push_back(tempBomb);
 	}
