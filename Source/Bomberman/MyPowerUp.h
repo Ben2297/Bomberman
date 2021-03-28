@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "MyPlayer.h"
 #include "Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInterface.h"
 #include "MyPowerUp.generated.h"
 
 UCLASS()
@@ -26,13 +28,17 @@ public:
 			bool bFromSweep,
 			const FHitResult &SweepResult);
 
+	// Box collision volume
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		UBoxComponent* BoxComponent;
+
 	// Static mesh
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* MeshComponent;
 
-	// Box collision volume
+	// Mesh material
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		UBoxComponent* BoxComponent;
+		UMaterialInterface* MaterialReference;
 
 protected:
 	// Called when the game starts or when spawned

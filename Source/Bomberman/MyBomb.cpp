@@ -90,6 +90,7 @@ void AMyBomb::OnExplode()
 	for (auto& player : Result)
 	{
 		//player->Destroy();
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
 	
 	// Destroys the bomb

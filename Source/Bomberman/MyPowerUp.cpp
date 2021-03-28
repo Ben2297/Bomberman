@@ -1,4 +1,5 @@
 #include "MyPowerUp.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 AMyPowerUp::AMyPowerUp()
@@ -12,12 +13,26 @@ AMyPowerUp::AMyPowerUp()
 	BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	BoxComponent->SetGenerateOverlapEvents(true);
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AMyPowerUp::OnPlayerEnter);
+	BoxComponent->SetRelativeScale3D(FVector(0.25f, 0.25f, 0.25f));
+	BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 
 	// Adds a static mesh
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	MeshComponent->SetupAttachment(GetRootComponent());
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere'"));
+	if (MeshAsset.Succeeded())
+	{
+		MeshComponent->SetStaticMesh(MeshAsset.Object);
+	}
+	MeshComponent->SetRelativeLocation(FVector(0.f, 0.f, -48.f));
 
-	
+	// Sets static mesh material
+	static ConstructorHelpers::FObjectFinder<UMaterial> MaterialAsset(TEXT("Material'/Game/StarterContent/Materials/M_Tech_Hex_Tile_Pulse.M_Tech_Hex_Tile_Pulse'"));
+	MaterialReference = MaterialAsset.Object;
+	if (MaterialAsset.Succeeded())
+	{
+		MeshComponent->SetMaterial(0, MaterialReference);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -48,6 +63,7 @@ void AMyPowerUp::OnPlayerEnter(UPrimitiveComponent* OverlapComponent,
 		if (Player != nullptr)
 		{
 			ActivatePowerUp(Player);
+			Destroy();
 		}
 	}
 }
